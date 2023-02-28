@@ -1,18 +1,16 @@
 import random
-import time
+import time as t
 import pyautogui as pag
 
 # input for timer
-runtime=pag.prompt(text='How many minutes do you want to run for?',title='Automouse',default=30)
-sleeptime=pag.prompt(text='How many seconds between mouse movements?',title='Automouse',default=1)
+runtime=float(pag.prompt(text='How many minutes do you want to run for?',title='Automouse',default=60))
+sleeptime=int(pag.prompt(text='How many seconds between mouse movements?',title='Automouse',default=2))
 
 # #variables for total time and mouse movement intervals
-sleeptime=int(sleeptime)
-runtime=float(runtime)
-sectime=runtime*60
-sectime=int(sectime)
-interval=int(sectime/sleeptime)
+sectime=int(runtime*60)
 loop=1
+
+starttime=int(t.time())
 
 #loop to move mouse until designated time
 while True:
@@ -23,12 +21,14 @@ while True:
     if loop%100==0:
         pag.rightClick()
     
-    time.sleep(sleeptime)
+    t.sleep(sleeptime)
+    currenttime=int(t.time())
 
-    if loop==interval:
+    if currenttime-starttime>=sectime:
         response=pag.confirm(text="It's been about %d minute(s)" %runtime,title="Automouse",buttons=['Keep Going','Stop'])
         if response=='Keep Going':
             loop=0
+            starttime=int(t.time())
         else:
             break
     else: loop+=1
